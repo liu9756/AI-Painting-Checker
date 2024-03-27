@@ -9,22 +9,16 @@ from dataLoading import train_loader, test_loader
 class KriaCNN(nn.Module):
     def __init__(self):
         super(KriaCNN, self).__init__()
-        # 第一层卷积
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        # 第二层卷积
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
-        # 全连接层
         self.fc1 = nn.Linear(64 * 64 * 64, 128)
-        self.fc2 = nn.Linear(128, 2)  # 两个输出类别：AI 和 HUMAN
+        self.fc2 = nn.Linear(128, 2) 
 
     def forward(self, x):
-        # 应用卷积层和池化层
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
-        # 展平图像
         x = x.view(-1, 64 * 64 * 64)
-        # 应用全连接层
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
@@ -79,7 +73,7 @@ def save_model(model_c, filepath):
 def main():
     train(model, train_loader, criterion, optimizer, 10)
     evaluate_model(model, test_loader)
-    save_model(model, "./model.pth")  # 保存在当前工作目录下
+    save_model(model, "./model.pth")  
 
 
 if __name__ == "__main__":
